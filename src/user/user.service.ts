@@ -24,7 +24,7 @@ export class UserService {
       throw new ConflictException('Useremail already exists');
     }
 
-    const hashedPassword = await bcrypt.hash(createUserDto.password, 10); // 비밀번호 암호화
+    const hashedPassword = await bcrypt.hash(password, 10); // 비밀번호 암호화
     const user = this.userRepository.create({ email, password: hashedPassword });
     return this.userRepository.save(user);
   }
