@@ -46,11 +46,18 @@ export class EmotionService {
         },
       );
 
-      const emotion = response.data[0]?.label || 'unknown';
+     // 감정 분석 결과
+      const firstEmotion = response.data[0]?.[0]?.label || 'unknown';
+
+     // 첫 번째 감정이 'neutral'이라면 두 번째 값을 선택
+      const emotion = firstEmotion === 'neutral' 
+      ? response.data[0]?.[1]?.label || 'unknown' 
+      : firstEmotion;
+
       const analysisResult = JSON.stringify(response.data);
 
       console.log(emotion);
-      console.log(analysisResult);
+      console.log(analysisResult)
 
       // 3. 감정 분석 결과 저장
       const emotionEntity = this.emotionRepository.create({
