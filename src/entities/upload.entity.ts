@@ -8,9 +8,9 @@ export class UploadEntity {
   @Column({ type: 'text', nullable: true })
   text: string;
 
-  @Column({ type: 'varchar', length: 255, nullable: true })
+  @Column({ type: 'text', nullable: true })
   imagePath: string;
 
-  @Column({ type: 'varchar', length: 255, nullable: true })
+  @Column({ type: 'text', nullable: true })
   videoPath: string;
 }
