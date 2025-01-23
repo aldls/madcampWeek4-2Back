@@ -2,11 +2,13 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
-import { User } from './entities/user.entity';
+// import { User } from './entities/user.entity';
+import { UploadModule } from './upload/upload.module';
 
 @Module({
   imports: [
     UserModule,
+    UploadModule,
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'mysql',
@@ -17,7 +19,7 @@ import { User } from './entities/user.entity';
       database: process.env.DB_NAME,
       autoLoadEntities: true,
       synchronize: true,
-      entities: [User],
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
     }),
   ],
 })
