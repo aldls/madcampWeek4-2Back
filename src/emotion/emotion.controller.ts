@@ -1,16 +1,30 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body, HttpException, HttpStatus } from '@nestjs/common';
 import { EmotionService } from './emotion.service';
+import { Emotion } from '../entities/emotion.entity'
 
 @Controller('emotion')
 export class EmotionController {
   constructor(private readonly emotionService: EmotionService) {}
 
-  @Post('text')
-  async analyze(@Body('text') text: string): Promise<any> {
-    if (!text || text.trim().length === 0) {
-      return { error: 'Text cannot be empty.' };
+  @Get()
+    findAll(): Promise<Emotion []> {
+      return this.emotionService.findAll();
     }
-    const result = await this.emotionService.analyzeEmotion(text);
-    return result;
+
+  @Post('analyze')
+  async analyzeText(@Body('textId') textId: number): Promise<any> {
+    if (!textId) {
+      throw new HttpException('Text ID is required.', HttpStatus.BAD_REQUEST);
+    }
+
+    try {
+      const result = await this.emotionService.analyzeAndSaveEmotion(textId);
+      return { message: 'Emotion analysis successful.', data: result };
+    } catch (error) {
+      throw new HttpException(
+        `Failed to analyze emotion: ${error.message}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }
