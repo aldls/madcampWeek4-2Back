@@ -29,7 +29,7 @@ import {
         }),
         fileFilter: (req, file, cb) => {
           // 파일 필터링 (필요에 따라 확장자 제한 가능)
-          const allowedTypes = ['image/png', 'image/jpeg', 'video/mp4'];
+          const allowedTypes = ['image/png', 'image/jpg','image/jpeg', 'video/mp4'];
           if (allowedTypes.includes(file.mimetype)) {
             cb(null, true);
           } else {
