@@ -40,9 +40,9 @@ import {
     )
     async handleUpload(
       @UploadedFiles() files: Express.Multer.File[], // 업로드된 파일 배열
-      @Body('text') text: string, // 클라이언트에서 전송된 텍스트
+      @Body() body: { text: string },  // 클라이언트에서 전송된 텍스트
     ) {
-      if (!files || files.length === 0) {
+      if ((!files || files.length === 0) && !body.text) {
         throw new Error('No files uploaded'); // 파일이 없을 경우 에러 처리
       }
 
@@ -50,11 +50,11 @@ import {
       const filePaths = files.map((file) => file.path);
 
       // UploadService를 통해 파일과 텍스트 처리
-      const result = await this.uploadService.saveData(text, filePaths);
+      const result = await this.uploadService.saveData(body.text, filePaths);
 
       return {
         message: 'Upload successful',
-        data: { text, filePaths },
+        data: { text: body.text, filePaths },
         result,
       };
     }
