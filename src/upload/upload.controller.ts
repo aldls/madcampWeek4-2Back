@@ -42,8 +42,16 @@ import {
       @UploadedFiles() files: Express.Multer.File[], // 업로드된 파일 배열
       @Body() body: { text: string },  // 클라이언트에서 전송된 텍스트
     ) {
-      if ((!files || files.length === 0) && !body.text) {
-        throw new Error('No files uploaded'); // 파일이 없을 경우 에러 처리
+      if (!files || files.length === 0) {
+        if (!body.text) {
+          throw new Error('No files uploaded and no text provided');
+        }
+        const result = await this.uploadService.saveData(body.text, []);
+        return {
+          message: 'Upload successful with text only',
+          data: { text: body.text },
+          result,
+        };
       }
 
       // 파일 경로 추출
