@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { UploadEntity } from './upload.entity';
 
 @Entity('emotion')
 export class Emotion {
@@ -16,4 +17,7 @@ export class Emotion {
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
+
+  @OneToMany(() => UploadEntity, upload => upload.emotion)
+  uploads: UploadEntity[];
 }
